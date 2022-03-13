@@ -26,6 +26,7 @@ class Media(Document):
     file_type = fields.StrField(allow_none=True)
     mime_type = fields.StrField(allow_none=True)
     caption = fields.StrField(allow_none=True)
+    link = fields.StrField(allow_none=True)
 
     class Meta:
         indexes = ('$file_name', )
@@ -47,6 +48,7 @@ async def save_file(media):
             file_type=media.file_type,
             mime_type=media.mime_type,
             caption=media.caption.html if media.caption else None,
+            link=media.link,
         )
     except ValidationError:
         logger.exception('Error occurred while saving file in database')
@@ -154,3 +156,4 @@ def unpack_new_file_id(new_file_id):
     )
     file_ref = encode_file_ref(decoded.file_reference)
     return file_id, file_ref
+
